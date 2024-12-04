@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@realm/react": "^0.6.0",
+    "axios": "^1.7.9",
     "expo": "^49.0.8",
     "expo-dev-client": "~2.4.8",
     "expo-splash-screen": "~0.20.5",

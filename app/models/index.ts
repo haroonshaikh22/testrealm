@@ -1,3 +1,4 @@
-import {Task} from './Task';
+import { Customer } from "./Customer";
+import { Task } from "./Task";
 
-export const schemas = [Task];
+export const schemas = [Task, Customer];

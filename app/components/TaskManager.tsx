@@ -1,20 +1,20 @@
-import React, {useCallback} from 'react';
-import {View, StyleSheet, Switch, Text} from 'react-native';
+import React, { useCallback } from "react";
+import { View, StyleSheet, Switch, Text } from "react-native";
 
-import {Task} from '../models/Task';
-import {IntroText} from './IntroText';
-import {AddTaskForm} from './AddTaskForm';
-import TaskList from './TaskList';
+import { Task } from "../models/Task";
+import { IntroText } from "./IntroText";
+import { AddTaskForm } from "./AddTaskForm";
+import TaskList from "./TaskList";
 
-import {useRealm} from '@realm/react';
-import {shadows} from '../styles/shadows';
+import { useRealm } from "@realm/react";
+import { shadows } from "../styles/shadows";
 
 export const TaskManager: React.FC<{
   tasks: Realm.Results<Task & Realm.Object>;
   userId?: string;
   setShowDone: (showDone: boolean) => void;
   showDone: boolean;
-}> = ({tasks, userId, setShowDone, showDone}) => {
+}> = ({ tasks, userId, setShowDone, showDone }) => {
   const realm = useRealm();
 
   const handleAddTask = useCallback(
@@ -33,11 +33,11 @@ export const TaskManager: React.FC<{
       realm.write(() => {
         return realm.create(Task, {
           description,
-          userId: userId ?? 'SYNC_DISABLED',
+          userId: userId ?? "SYNC_DISABLED",
         });
       });
     },
-    [realm, userId],
+    [realm, userId]
   );
 
   const handleToggleTaskStatus = useCallback(
@@ -61,7 +61,7 @@ export const TaskManager: React.FC<{
       //   task.isComplete = !task.isComplete;
       // });
     },
-    [realm],
+    [realm]
   );
 
   const handleDeleteTask = useCallback(
@@ -73,22 +73,18 @@ export const TaskManager: React.FC<{
         // realm?.delete(realm?.objectForPrimaryKey('Task', id));
       });
     },
-    [realm],
+    [realm]
   );
 
   return (
     <>
       <View style={styles.content}>
         <AddTaskForm onSubmit={handleAddTask} />
-        {tasks.length === 0 ? (
-          <IntroText />
-        ) : (
-          <TaskList
-            tasks={tasks}
-            onToggleTaskStatus={handleToggleTaskStatus}
-            onDeleteTask={handleDeleteTask}
-          />
-        )}
+        <TaskList
+          tasks={tasks}
+          onToggleTaskStatus={handleToggleTaskStatus}
+          onDeleteTask={handleDeleteTask}
+        />
       </View>
       <View style={styles.switchPanel}>
         <Text style={styles.switchPanelText}>Show Completed?</Text>
@@ -105,8 +101,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   switchPanel: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
+    flexDirection: "row",
+    backgroundColor: "#fff",
     padding: 10,
     borderRadius: 5,
     marginHorizontal: 10,
