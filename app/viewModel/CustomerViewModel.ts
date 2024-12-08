@@ -12,10 +12,12 @@ const useCustomerDataViewModel = () => {
   const [searchText, setSearchText] = useState("");
   const [sortList, setSortList] = useState(0);
   const [filterType, setFilterType] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadMore, setLoadMore] = useState(false);
 
   const onfetchDataHandler = async ({ page, search, sort, filter }) => {
-    const url =
-      "https://cgv2.creativegalileo.com/api/V1/customer/filter?paginated=true&pageNo=1&pageSize=50";
+    setIsLoading(true);
+    const url = `https://cgv2.creativegalileo.com/api/V1/customer/filter?paginated=true&pageNo=${page}&pageSize=10`;
 
     const options = {
       method: "get",
@@ -31,7 +33,6 @@ const useCustomerDataViewModel = () => {
 
       realm.write(() => {
         response?.data?.data?.customers.forEach((customer) => {
-          console.log(customer, "cisu*********");
           realm.create("Customer", {
             cgId: customer.cgId || "",
             id: customer.id || "",
@@ -44,6 +45,7 @@ const useCustomerDataViewModel = () => {
           });
         });
       });
+      setIsLoading(false);
       setCustData(response?.data?.data?.customers);
 
       console.log("========response============================");
@@ -57,7 +59,19 @@ const useCustomerDataViewModel = () => {
     }
   };
 
-  return { onfetchDataHandler, custData };
+  const loadMorehandler = () => {
+    let lastCount = newPage + 10;
+    setNewPage(lastCount);
+
+    onfetchDataHandler({
+      page: lastCount,
+      search: searchText,
+      sort: "",
+      filter: "",
+    });
+  };
+
+  return { onfetchDataHandler, custData, isLoading, loadMorehandler };
 };
 
 export default useCustomerDataViewModel;
